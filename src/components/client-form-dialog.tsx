@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Client, PLATFORMS, RESPONSIBLES } from "@/lib/clients-api";
+import { Client, ClientStatus, PLATFORMS, RESPONSIBLES } from "@/lib/clients-api";
 
 interface Props {
   open: boolean;
@@ -16,12 +16,21 @@ interface Props {
   onSubmit: (data: Omit<Client, "id" | "created_at" | "updated_at">) => Promise<void>;
 }
 
-const empty = {
+type FormState = {
+  name: string;
+  status: ClientStatus;
+  responsible: string;
+  monthly_investment: number;
+  platforms: string[];
+  notes: string;
+};
+
+const empty: FormState = {
   name: "",
-  status: "ativo" as const,
+  status: "ativo",
   responsible: "Aloan",
   monthly_investment: 0,
-  platforms: [] as string[],
+  platforms: [],
   notes: "",
 };
 
