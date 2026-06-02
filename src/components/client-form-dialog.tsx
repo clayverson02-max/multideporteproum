@@ -19,19 +19,23 @@ interface Props {
 type FormState = {
   name: string;
   status: ClientStatus;
+  ads_active: boolean;
   responsible: string;
   monthly_investment: number;
   platforms: string[];
   notes: string;
+  report: Record<string, unknown>;
 };
 
 const empty: FormState = {
   name: "",
   status: "ativo",
-  responsible: "Aloan",
+  ads_active: true,
+  responsible: "Clayverson",
   monthly_investment: 0,
   platforms: [],
   notes: "",
+  report: {},
 };
 
 export function ClientFormDialog({ open, onOpenChange, initial, onSubmit }: Props) {
@@ -45,10 +49,12 @@ export function ClientFormDialog({ open, onOpenChange, initial, onSubmit }: Prop
           ? {
               name: initial.name,
               status: initial.status,
+              ads_active: initial.ads_active ?? true,
               responsible: initial.responsible,
               monthly_investment: Number(initial.monthly_investment),
               platforms: initial.platforms ?? [],
               notes: initial.notes ?? "",
+              report: (initial.report as Record<string, unknown>) ?? {},
             }
           : empty,
       );
