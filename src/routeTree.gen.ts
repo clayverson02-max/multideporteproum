@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ClientesRouteImport } from './routes/clientes'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ClientesNovoRouteImport } from './routes/clientes.novo'
+import { Route as ClientesIdRouteImport } from './routes/clientes.$id'
 
 const ClientesRoute = ClientesRouteImport.update({
   id: '/clientes',
@@ -28,29 +29,37 @@ const ClientesNovoRoute = ClientesNovoRouteImport.update({
   path: '/novo',
   getParentRoute: () => ClientesRoute,
 } as any)
+const ClientesIdRoute = ClientesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ClientesRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/clientes': typeof ClientesRouteWithChildren
+  '/clientes/$id': typeof ClientesIdRoute
   '/clientes/novo': typeof ClientesNovoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/clientes': typeof ClientesRouteWithChildren
+  '/clientes/$id': typeof ClientesIdRoute
   '/clientes/novo': typeof ClientesNovoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/clientes': typeof ClientesRouteWithChildren
+  '/clientes/$id': typeof ClientesIdRoute
   '/clientes/novo': typeof ClientesNovoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/clientes' | '/clientes/novo'
+  fullPaths: '/' | '/clientes' | '/clientes/$id' | '/clientes/novo'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/clientes' | '/clientes/novo'
-  id: '__root__' | '/' | '/clientes' | '/clientes/novo'
+  to: '/' | '/clientes' | '/clientes/$id' | '/clientes/novo'
+  id: '__root__' | '/' | '/clientes' | '/clientes/$id' | '/clientes/novo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -81,14 +90,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClientesNovoRouteImport
       parentRoute: typeof ClientesRoute
     }
+    '/clientes/$id': {
+      id: '/clientes/$id'
+      path: '/$id'
+      fullPath: '/clientes/$id'
+      preLoaderRoute: typeof ClientesIdRouteImport
+      parentRoute: typeof ClientesRoute
+    }
   }
 }
 
 interface ClientesRouteChildren {
+  ClientesIdRoute: typeof ClientesIdRoute
   ClientesNovoRoute: typeof ClientesNovoRoute
 }
 
 const ClientesRouteChildren: ClientesRouteChildren = {
+  ClientesIdRoute: ClientesIdRoute,
   ClientesNovoRoute: ClientesNovoRoute,
 }
 

@@ -14,36 +14,86 @@ export type Database = {
   }
   public: {
     Tables: {
+      client_demands: {
+        Row: {
+          assignee: string
+          client_id: string
+          created_at: string
+          description: string
+          id: string
+          priority: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assignee?: string
+          client_id: string
+          created_at?: string
+          description?: string
+          id?: string
+          priority?: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assignee?: string
+          client_id?: string
+          created_at?: string
+          description?: string
+          id?: string
+          priority?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_demands_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clients: {
         Row: {
+          ads_active: boolean
           created_at: string
           id: string
           monthly_investment: number
           name: string
           notes: string
           platforms: string[]
+          report: Json
           responsible: string
           status: string
           updated_at: string
         }
         Insert: {
+          ads_active?: boolean
           created_at?: string
           id?: string
           monthly_investment?: number
           name: string
           notes?: string
           platforms?: string[]
+          report?: Json
           responsible?: string
           status?: string
           updated_at?: string
         }
         Update: {
+          ads_active?: boolean
           created_at?: string
           id?: string
           monthly_investment?: number
           name?: string
           notes?: string
           platforms?: string[]
+          report?: Json
           responsible?: string
           status?: string
           updated_at?: string

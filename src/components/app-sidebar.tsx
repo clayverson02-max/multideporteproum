@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Users, UserPlus, Crown } from "lucide-react";
+import { LayoutDashboard, Users, UserPlus, Sparkles } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -28,15 +28,18 @@ export function AppSidebar() {
       <SidebarHeader className="px-4 py-6">
         <Link to="/" className="flex items-center gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg gold-gradient shadow-gold">
-            <Crown className="h-5 w-5 text-primary-foreground" />
+            <Sparkles className="h-5 w-5 text-primary-foreground" />
           </div>
           {!collapsed && (
             <div className="flex flex-col leading-tight">
               <span className="text-sm font-bold tracking-wide text-gold-gradient">
-                RF MULTIMARCAS
+                ASSESSORIA
               </span>
-              <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                Client Manager
+              <span className="text-xs font-semibold text-foreground/90">
+                Clayverson Demontier
+              </span>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mt-0.5">
+                Painel Estratégico
               </span>
             </div>
           )}
@@ -48,7 +51,10 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {
-                const active = currentPath === item.url;
+                const active =
+                  item.url === "/"
+                    ? currentPath === "/"
+                    : currentPath === item.url || currentPath.startsWith(item.url + "/");
                 return (
                   <SidebarMenuItem key={item.url}>
                     <SidebarMenuButton
