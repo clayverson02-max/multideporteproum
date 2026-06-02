@@ -80,9 +80,9 @@ function Dashboard() {
         ) : (
           <div className="divide-y divide-border">
             {clients.slice(0, 5).map((c) => (
-              <div key={c.id} className="flex items-center justify-between py-3">
+              <Link key={c.id} to="/clientes/$id" params={{ id: c.id }} className="flex items-center justify-between py-3 hover:bg-input/30 rounded-md px-2 transition-colors">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className={`h-2.5 w-2.5 rounded-full ${c.status === "ativo" ? "bg-success" : "bg-destructive"}`} />
+                  <div className={`h-2.5 w-2.5 rounded-full ${c.ads_active ? "bg-success shadow-[0_0_8px] shadow-success" : "bg-destructive"}`} />
                   <div className="min-w-0">
                     <p className="font-medium truncate">{c.name}</p>
                     <p className="text-xs text-muted-foreground">{c.responsible} · {c.platforms.join(", ") || "Sem plataforma"}</p>
@@ -91,7 +91,7 @@ function Dashboard() {
                 <Badge variant="outline" className="border-primary/30 text-primary">
                   {brl(Number(c.monthly_investment))}
                 </Badge>
-              </div>
+              </Link>
             ))}
           </div>
         )}
