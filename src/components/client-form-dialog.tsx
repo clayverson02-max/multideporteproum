@@ -72,7 +72,7 @@ export function ClientFormDialog({ open, onOpenChange, initial, onSubmit }: Prop
     if (!form.name.trim()) return;
     setSaving(true);
     try {
-      await onSubmit(form);
+      await onSubmit(form as unknown as Omit<Client, "id" | "created_at" | "updated_at">);
       onOpenChange(false);
     } finally {
       setSaving(false);
