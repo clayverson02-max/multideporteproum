@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Users, UserCheck, UserX, DollarSign, ArrowRight } from "lucide-react";
+import { Users, Power, PowerOff, DollarSign, ArrowRight } from "lucide-react";
 import { listClients } from "@/lib/clients-api";
 import { StatCard } from "@/components/stat-card";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 
 export const Route = createFileRoute("/")({
   head: () => ({
-    meta: [{ title: "Dashboard — RF Client Manager" }],
+    meta: [{ title: "Painel Estratégico — Assessoria Clayverson Demontier" }],
   }),
   component: Dashboard,
 });
@@ -24,10 +24,10 @@ function Dashboard() {
   });
 
   const total = clients.length;
-  const active = clients.filter((c) => c.status === "ativo").length;
-  const inactive = clients.filter((c) => c.status === "inativo").length;
+  const adsOn = clients.filter((c) => c.ads_active).length;
+  const adsOff = clients.filter((c) => !c.ads_active).length;
   const revenue = clients
-    .filter((c) => c.status === "ativo")
+    .filter((c) => c.ads_active)
     .reduce((sum, c) => sum + Number(c.monthly_investment || 0), 0);
 
   return (
@@ -35,13 +35,13 @@ function Dashboard() {
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-xs uppercase tracking-[0.25em] text-primary/80 font-medium">
-            Visão Geral
+            Assessoria Clayverson Demontier
           </p>
           <h1 className="mt-1 text-4xl md:text-5xl font-bold tracking-tight">
-            <span className="text-gold-gradient">Dashboard</span>
+            <span className="text-gold-gradient">Painel Estratégico</span>
           </h1>
           <p className="mt-2 text-muted-foreground">
-            Acompanhe seus clientes e o faturamento em tempo real.
+            Gerencie clientes, demandas e relatórios de tráfego pago em um só lugar.
           </p>
         </div>
         <Link to="/clientes/novo">
@@ -53,9 +53,9 @@ function Dashboard() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard label="Total de Clientes" value={isLoading ? "—" : total} icon={<Users className="h-5 w-5" />} accent="gold" />
-        <StatCard label="Clientes Ativos" value={isLoading ? "—" : active} icon={<UserCheck className="h-5 w-5" />} accent="success" />
-        <StatCard label="Clientes Inativos" value={isLoading ? "—" : inactive} icon={<UserX className="h-5 w-5" />} accent="destructive" />
-        <StatCard label="Faturamento Mensal" value={isLoading ? "—" : brl(revenue)} icon={<DollarSign className="h-5 w-5" />} accent="gold" />
+        <StatCard label="Anúncios LIGADOS" value={isLoading ? "—" : adsOn} icon={<Power className="h-5 w-5" />} accent="success" />
+        <StatCard label="Anúncios DESLIGADOS" value={isLoading ? "—" : adsOff} icon={<PowerOff className="h-5 w-5" />} accent="destructive" />
+        <StatCard label="Investimento em Mídia" value={isLoading ? "—" : brl(revenue)} icon={<DollarSign className="h-5 w-5" />} accent="gold" />
       </div>
 
       <Card className="bg-card border-border shadow-card p-6">
