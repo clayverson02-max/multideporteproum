@@ -67,13 +67,13 @@ export async function getClient(id: string): Promise<Client> {
 }
 
 export async function createClient(input: Omit<Client, "id" | "created_at" | "updated_at">) {
-  const { data, error } = await supabase.from("clients").insert(input).select().single();
+  const { data, error } = await supabase.from("clients").insert(input as never).select().single();
   if (error) throw error;
   return data as Client;
 }
 
 export async function updateClient(id: string, input: Partial<Omit<Client, "id" | "created_at" | "updated_at">>) {
-  const { data, error } = await supabase.from("clients").update(input).eq("id", id).select().single();
+  const { data, error } = await supabase.from("clients").update(input as never).eq("id", id).select().single();
   if (error) throw error;
   return data as Client;
 }
