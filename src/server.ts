@@ -1,54 +1,9 @@
-import "./lib/error-capture";
+const META_PIXEL_ID = "889185807027175";
 
-import { consumeLastCapturedError } from "./lib/error-capture";
-import { renderErrorPage } from "./lib/error-page";
-
-type ServerEntry = {
-  fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
-};
-
+type ServerEntry = { fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response };
 let serverEntryPromise: Promise<ServerEntry> | undefined;
-
-async function getServerEntry(): Promise<ServerEntry> {
-  if (!serverEntryPromise) {
-    serverEntryPromise = import("@tanstack/react-start/server-entry").then(
-      (m) => (m.default ?? m) as ServerEntry,
-    );
-  }
-  return serverEntryPromise;
-}
-
-// h3 swallows in-handler throws into a normal 500 Response with body
-// {"unhandled":true,"message":"HTTPError"} — try/catch alone never fires for those.
-async function normalizeCatastrophicSsrResponse(response: Response): Promise<Response> {
-  if (response.status < 500) return response;
-  const contentType = response.headers.get("content-type") ?? "";
-  if (!contentType.includes("application/json")) return response;
-
-  const body = await response.clone().text();
-  if (!body.includes('"unhandled":true') || !body.includes('"message":"HTTPError"')) {
-    return response;
-  }
-
-  console.error(consumeLastCapturedError() ?? new Error(`h3 swallowed SSR error: ${body}`));
-  return new Response(renderErrorPage(), {
-    status: 500,
-    headers: { "content-type": "text/html; charset=utf-8" },
-  });
-}
-
-export default {
-  async fetch(request: Request, env: unknown, ctx: unknown) {
-    try {
-      const handler = await getServerEntry();
-      const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
-    } catch (error) {
-      console.error(error);
-      return new Response(renderErrorPage(), {
-        status: 500,
-        headers: { "content-type": "text/html; charset=utf-8" },
-      });
-    }
-  },
-};
+async function getServerEntry(){ if(!serverEntryPromise) serverEntryPromise=import("@tanstack/react-start/server-entry").then(m=>(m.default??m) as ServerEntry); return serverEntryPromise; }
+function token(env: unknown){ const r=(env&&typeof env==='object'?env:{}) as Record<string,unknown>; if(typeof r.META_CAPI_ACCESS_TOKEN==='string'&&r.META_CAPI_ACCESS_TOKEN)return r.META_CAPI_ACCESS_TOKEN; try{return (globalThis as typeof globalThis & {process?:{env?:Record<string,string|undefined>}}).process?.env?.META_CAPI_ACCESS_TOKEN}catch{return undefined} }
+function cookie(req:Request,name:string){const c=req.headers.get('cookie')??'';return c.match(new RegExp(`(?:^|;\\s*)${name}=([^;]+)`))?.[1]}
+async function capi(req:Request,env:unknown){if(req.method!=='POST')return new Response('Method Not Allowed',{status:405});const access=token(env);if(!access)return Response.json({ok:true,configured:false});try{const b=await req.json() as {event_name?:string;event_id?:string;custom_data?:Record<string,unknown>;url?:string};const allowed=new Set(['PageView','ViewContent','Lead','InitiateCheckout']);if(!b.event_name||!allowed.has(b.event_name))return Response.json({ok:false,error:'Invalid event'},{status:400});const user_data:Record<string,string>={client_user_agent:req.headers.get('user-agent')??''};const fbp=cookie(req,'_fbp'),fbc=cookie(req,'_fbc');if(fbp)user_data.fbp=fbp;if(fbc)user_data.fbc=fbc;const payload={data:[{event_name:b.event_name,event_time:Math.floor(Date.now()/1000),event_id:b.event_id,action_source:'website',event_source_url:b.url??req.headers.get('referer')??'',user_data,custom_data:b.custom_data??{}}]};const r=await fetch(`https://graph.facebook.com/v23.0/${META_PIXEL_ID}/events?access_token=${encodeURIComponent(access)}`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload)});return new Response(await r.text(),{status:r.status,headers:{'content-type':'application/json'}})}catch{return Response.json({ok:false},{status:500})}}
+export default {async fetch(request:Request,env:unknown,ctx:unknown){const url=new URL(request.url);if(url.pathname==='/api/meta-capi')return capi(request,env);return (await getServerEntry()).fetch(request,env,ctx)}};
