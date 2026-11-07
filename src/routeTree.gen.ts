@@ -8,7 +8,6 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as VslRouteImport } from './routes/vsl'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -16,36 +15,27 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 
-const VslRoute = VslRouteImport.update({
-  id: '/vsl',
-  path: '/vsl',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/vsl': typeof VslRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/vsl': typeof VslRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/vsl': typeof VslRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/vsl'
+  fullPaths: '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/vsl'
-  id: '__root__' | '/' | '/vsl'
+  to: '/'
+  id: '__root__' | '/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  VslRoute: typeof VslRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -57,19 +47,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/vsl': {
-      id: '/vsl'
-      path: '/vsl'
-      fullPath: '/vsl'
-      preLoaderRoute: typeof VslRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute,
-  VslRoute,
 }
 
 export const routeTree = rootRouteImport

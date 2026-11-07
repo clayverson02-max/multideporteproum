@@ -8,8 +8,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { title: "Multideporte Pro | +5.000 Entrenamientos" },
-      { name: "description", content: "+5.000 entrenamientos de fútbol, futsal, básquetbol y vóleibol. Acceso de por vida." },
+      { title: "Construpedia | Toda la construcción en una sola plataforma" },
+      { name: "description", content: "8 alas en un solo acceso: estructuras, maestro de obra, electricidad, sanitarias, soldadura, acabados, topografía y seguridad. Un solo pago." },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),

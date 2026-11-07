@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { loadUtmfyScript } from "./utmfy";
 
-export const META_PIXEL_ID = "889185807027175";
+export const META_PIXEL_ID = "2149847235657959";
 export type TrackingEvent = "PageView" | "ViewContent" | "Lead" | "InitiateCheckout";
 
 type TrackingWindow = Window & { fbq?: (...args: unknown[]) => void; _fbq?: unknown };
