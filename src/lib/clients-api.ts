@@ -82,6 +82,7 @@ export const DEMAND_PRIORITIES: { value: DemandPriority; label: string }[] = [
 
 type ClientRow = Database["public"]["Tables"]["clients"]["Row"];
 type ClientInsert = Database["public"]["Tables"]["clients"]["Insert"];
+type ClientUpdate = Database["public"]["Tables"]["clients"]["Update"];
 type DemandRow = Database["public"]["Tables"]["client_demands"]["Row"];
 
 const toClient = (row: ClientRow): Client => ({
@@ -147,7 +148,7 @@ export async function createClient(input: ClientInput): Promise<Client> {
 }
 
 export async function updateClient(id: string, input: Partial<ClientInput>): Promise<Client> {
-  const payload: ClientInsert = { id };
+  const payload: ClientUpdate = {};
   if (input.name !== undefined) payload.name = input.name;
   if (input.status !== undefined) payload.status = input.status;
   if (input.ads_active !== undefined) payload.ads_active = input.ads_active;
