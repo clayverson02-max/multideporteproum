@@ -4,7 +4,7 @@ import { track, useMarketingTracking } from "../lib/tracking";
 import "../Index.css";
 
 const CHECKOUT = "https://pay.hotmart.com/S108390116B?checkoutMode=10";
-const PRECO = 15;
+const PRECO = 10;
 const VIDEO = "/vsl-construpedia.mp4";
 
 const FICHAS = Array.from({ length: 20 }, (_, i) => `/img/fichas/f${String(i + 1).padStart(2, "0")}.jpg`);
