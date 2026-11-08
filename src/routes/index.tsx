@@ -3,8 +3,7 @@ import { useEffect } from "react";
 import { track, useMarketingTracking } from "../lib/tracking";
 import "../Index.css";
 
-// ⬇️ TROQUE PELO CHECKOUT REAL DA CONSTRUPEDIA
-const CHECKOUT = "https://pay.hotmart.com/REEMPLAZAR?checkoutMode=10";
+const CHECKOUT = "https://pay.hotmart.com/S108390116B?checkoutMode=10";
 const PRECO = 15;
 const VIDEO = "/vsl-construpedia.mp4";
 
